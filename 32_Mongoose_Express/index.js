@@ -22,6 +22,15 @@ app.use(methodOverride('_method'))
 
 const categories = ['fruit', 'vegetable', 'dairy']
 
+app.post('/products', async (req, res) => {
+    const product = new Product(req.body)
+    await product.save()
+    res.redirect(`/products/${product._id}`)
+})
+app.get('/products/new', (req, res) => {
+    res.render('products/new', { categories })
+})
+
 app.get('/products', async (req, res) => {
     const { category } = req.query
     if (category) {
@@ -32,9 +41,11 @@ app.get('/products', async (req, res) => {
         res.render('products/index', { products, category: 'All' })
     }
 })
-
-app.get('/products/new', (req, res) => {
-    res.render('products/new', { categories })
+app.get('/products/:id', async (req, res) => {
+    const { id } = req.params
+    console.log(req.params) 
+    const product = await Product.findById(id)
+    res.render('products/show', { product })
 })
 
 app.get('/products/:id/edit', async (req, res) => {
@@ -50,18 +61,7 @@ app.put('/products/:id', async (req, res) => {
     res.redirect(`/products/${product._id}`)
 })
 
-app.post('/products', async (req, res) => {
-    const product = new Product(req.body)
-    await product.save()
-    res.redirect(`/products/${product._id}`)
-})
 
-app.get('/products/:id', async (req, res) => {
-    const { id } = req.params
-    console.log(req.params) 
-    const product = await Product.findById(id)
-    res.render('products/show', { product })
-})
 
 app.delete('/products/:id', async (req, res) => {
     const { id } = req.params
