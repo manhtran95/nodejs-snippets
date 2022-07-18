@@ -1,31 +1,32 @@
 express = require('express')
 app = express()
 
-app.get('/', (req, res) => {
-    console.log(1)
+app.get('/', (req, res, next) => {
+    console.log(111)
+    next()
 })
 
-app.get('/', (req, res) => {
-    console.log(2)
+app.get('/', (req, res, n) => {
+    console.log(222)
+    n()
 })
 
 app.get('/', (req, res, next) => {
     // setTimeout(() => {
     // try{
-        err = new Error('BROKEN')
-        err.status = 403
-        throw err
+    console.log(333)
     // } catch {
-        const {status, message} = err;
-        res.status(status).send(message)
+    // const {status, message} = err;
+    // res.status(status).send(message)
     // }
     //   next(err)
     // }, 100)
-    res.send("123")
+    // res.send("123")
   })
 
-app.use((req, res, next) => {
-    const {status, message} = err;
+app.use((req, res) => {
+    console.log(444)
+    // const {status, message} = err;
     // res.status(status).send(message)
 })
 
